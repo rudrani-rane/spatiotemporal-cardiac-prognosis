@@ -1,0 +1,21 @@
+# Raw Data
+EchoNet-Dynamic/
+*.avi
+
+__pycache__/
+*.pyc
+*.pyo
+
+venv/
+#env/
+
+#.DS_Store
+#Thumbs.db
+#*.log
+
+azcopy.exe
+
+data/processed/*
+data/mappings/*.json
+data/metadata/*.csv
+!data/**/.gitkeep
