@@ -16,4 +16,8 @@ venv/
 azcopy.exe
 
 data/processed/*
-!data/**/.gitkeep
+data/processed_frames/*
+data/**/.gitkeep
+
+#Deleted file (edited the name - wrong name)
+utils/path_utills.py

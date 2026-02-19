@@ -1,0 +1,3 @@
+img_size: 224
+grayscale: true
+normalize: true
