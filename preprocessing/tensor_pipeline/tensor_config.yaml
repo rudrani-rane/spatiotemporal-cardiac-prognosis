@@ -1,0 +1,5 @@
+frames_per_clip: 7
+stride: 4
+resize_height: 112
+resize_width: 112
+normalization: minmax

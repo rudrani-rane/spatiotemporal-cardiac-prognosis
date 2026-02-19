@@ -18,6 +18,9 @@ azcopy.exe
 data/processed/*
 data/processed_frames/*
 data/**/.gitkeep
+data/tensors/*
+
 
 #Deleted file (edited the name - wrong name)
 utils/path_utills.py
+
