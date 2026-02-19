@@ -16,6 +16,4 @@ venv/
 azcopy.exe
 
 data/processed/*
-data/mappings/*.json
-data/metadata/*.csv
 !data/**/.gitkeep
