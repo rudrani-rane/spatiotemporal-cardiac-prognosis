@@ -1,43 +1,49 @@
-import torch
 import numpy as np
+from sklearn.metrics import r2_score
 
 
-def mae(pred, target):
-    return torch.mean(torch.abs(pred - target)).item()
+def MAE(y_true, y_pred):
+    return np.mean(np.abs(y_true - y_pred))
 
 
-def rmse(pred, target):
-    return torch.sqrt(torch.mean((pred - target) ** 2)).item()
+def RMSE(y_true, y_pred):
+    return np.sqrt(np.mean((y_true - y_pred) ** 2))
 
 
-def r2_score(pred, target):
-    target_mean = torch.mean(target)
-    ss_tot = torch.sum((target - target_mean) ** 2)
-    ss_res = torch.sum((target - pred) ** 2)
-    return (1 - ss_res / ss_tot).item()
+def MAPE(y_true, y_pred):
+    return np.mean(np.abs((y_true - y_pred) / (y_true + 1e-8))) * 100
 
 
-def mape(pred, target):
-    return torch.mean(torch.abs((target - pred) / (target + 1e-8))).item() * 100
+def R2(y_true, y_pred):
+    return r2_score(y_true, y_pred)
 
 
-def pearson_corr(pred, target):
-    pred = pred.detach().cpu().numpy()
-    target = target.detach().cpu().numpy()
-
-    return np.corrcoef(pred, target)[0, 1]
+def Pearson(y_true, y_pred):
+    return np.corrcoef(y_true, y_pred)[0, 1]
 
 
-def concordance_cc(pred, target):
-    pred = pred.detach().cpu().numpy()
-    target = target.detach().cpu().numpy()
+def ConcordanceCC(y_true, y_pred):
+    mean_true = np.mean(y_true)
+    mean_pred = np.mean(y_pred)
 
-    mean_pred = np.mean(pred)
-    mean_target = np.mean(target)
+    var_true = np.var(y_true)
+    var_pred = np.var(y_pred)
 
-    var_pred = np.var(pred)
-    var_target = np.var(target)
+    cov = np.mean((y_true - mean_true) * (y_pred - mean_pred))
 
-    cov = np.mean((pred - mean_pred) * (target - mean_target))
+    return (2 * cov) / (var_true + var_pred + (mean_true - mean_pred) ** 2 + 1e-8)
 
-    return (2 * cov) / (var_pred + var_target + (mean_pred - mean_target) ** 2)
+
+def compute_all_metrics(y_true, y_pred):
+
+    y_true = np.array(y_true)
+    y_pred = np.array(y_pred)
+
+    return {
+        "MAE": MAE(y_true, y_pred),
+        "RMSE": RMSE(y_true, y_pred),
+        "MAPE": MAPE(y_true, y_pred),
+        "R2": R2(y_true, y_pred),
+        "Pearson": Pearson(y_true, y_pred),
+        "CCC": ConcordanceCC(y_true, y_pred)
+    }
