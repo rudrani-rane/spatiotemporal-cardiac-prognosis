@@ -1,49 +1,50 @@
+import torch
 import numpy as np
-from sklearn.metrics import r2_score
 
+# Basic Regression Metrics
 
-def MAE(y_true, y_pred):
-    return np.mean(np.abs(y_true - y_pred))
+def mae(preds, targets):
+    return torch.mean(torch.abs(preds - targets)).item()
 
+def rmse(preds, targets):
+    return torch.sqrt(torch.mean((preds - targets) ** 2)).item()
 
-def RMSE(y_true, y_pred):
-    return np.sqrt(np.mean((y_true - y_pred) ** 2))
+def mape(preds, targets):
+    return torch.mean(torch.abs((targets - preds) / (targets + 1e-8))) * 100
 
+# R2 Score
 
-def MAPE(y_true, y_pred):
-    return np.mean(np.abs((y_true - y_pred) / (y_true + 1e-8))) * 100
+def r2_score(preds, targets):
+    preds = preds.detach().cpu().numpy()
+    targets = targets.detach().cpu().numpy()
 
+    ss_res = np.sum((targets - preds) ** 2)
+    ss_tot = np.sum((targets - np.mean(targets)) ** 2)
 
-def R2(y_true, y_pred):
-    return r2_score(y_true, y_pred)
+    return 1 - (ss_res / (ss_tot + 1e-8))
 
+# Clinical Accuracy
 
-def Pearson(y_true, y_pred):
-    return np.corrcoef(y_true, y_pred)[0, 1]
+def accuracy_within_tolerance(preds, targets, tol):
+    diff = torch.abs(preds - targets)
+    correct = (diff <= tol).float()
+    return torch.mean(correct).item()
 
+# Aggregate Metrics
 
-def ConcordanceCC(y_true, y_pred):
-    mean_true = np.mean(y_true)
-    mean_pred = np.mean(y_pred)
+def compute_all_metrics(preds, targets):
 
-    var_true = np.var(y_true)
-    var_pred = np.var(y_pred)
-
-    cov = np.mean((y_true - mean_true) * (y_pred - mean_pred))
-
-    return (2 * cov) / (var_true + var_pred + (mean_true - mean_pred) ** 2 + 1e-8)
-
-
-def compute_all_metrics(y_true, y_pred):
-
-    y_true = np.array(y_true)
-    y_pred = np.array(y_pred)
+    preds = preds.view(-1)
+    targets = targets.view(-1)
 
     return {
-        "MAE": MAE(y_true, y_pred),
-        "RMSE": RMSE(y_true, y_pred),
-        "MAPE": MAPE(y_true, y_pred),
-        "R2": R2(y_true, y_pred),
-        "Pearson": Pearson(y_true, y_pred),
-        "CCC": ConcordanceCC(y_true, y_pred)
+        "MAE": mae(preds, targets),
+        "RMSE": rmse(preds, targets),
+        "MAPE": mape(preds, targets).item(),
+        "R2": r2_score(preds, targets),
+
+        # Clinical Accuracy
+        "Acc@5": accuracy_within_tolerance(preds, targets, 5),
+        "Acc@3": accuracy_within_tolerance(preds, targets, 3),
+        "Acc@2": accuracy_within_tolerance(preds, targets, 2),
     }
