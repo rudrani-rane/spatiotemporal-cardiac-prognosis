@@ -6,8 +6,8 @@ import pandas as pd
 from torch.utils.data import Dataset
 
 # ====== PATH CONFIG ======
-VIDEO_DIR = r"E:\Rudrani\Projects\SDP\data\processed_frames"
-LABEL_PATH = r"E:\Rudrani\Projects\SDP\data\metadata\video_labels.csv"
+VIDEO_DIR = r"D:\Setu\SDP_Project\spatiotemporal-cardiac-prognosis\data\processed_frames"
+LABEL_PATH = r"D:\Setu\SDP_Project\spatiotemporal-cardiac-prognosis\data\metadata\video_labels.csv"
 
 IMG_SIZE = 112
 

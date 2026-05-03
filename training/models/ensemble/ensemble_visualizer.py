@@ -1,9 +1,6 @@
 """
 Ensemble Visualizer
-===================
-Standalone visualizer for the Ensemble model and 3-way comparison.
 
-Run AFTER both base models are trained and ensemble_runner has been executed.
 
 Usage:
     python -m training.models.ensemble.ensemble_visualizer

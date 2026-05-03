@@ -3,7 +3,7 @@ import torch
 import pandas as pd
 from torch.utils.data import Dataset
 
-# Correct project root (go 2 levels up from training/)
+
 PROJECT_ROOT = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "../")
 )
