@@ -25,3 +25,4 @@ data/tensors/*
 #Deleted file (edited the name - wrong name)
 utils/path_utills.py
 
+*.pth
